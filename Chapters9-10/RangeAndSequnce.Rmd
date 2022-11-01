@@ -19,6 +19,9 @@ library(ggplot2)
 This chunk plots a set of IRanges data, using more robust methods than in plot-ranges.R
 
 ```{r}
+# This code has been modified from plot-ranges.r 
+# Copyright (C) 2014 Vince Buffalo <vsbuffaloAAAAA@gmail.com>
+# This code has been modified using stack exchange: Question Title
 # Define Ranges
 x <- IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 2, 23))
 names(x) <- letters[1:4]
@@ -45,9 +48,6 @@ ggplot(out) + geom_rect(aes(ymin=ymin, ymax=ymax, xmin=start-0.5, xmax=end+0.5))
 ```{r pressure, echo=FALSE}
 
 # Install necessary packages
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
 BiocManager::install("TxDb.Mmusculus.UCSC.mm10.ensGene")
 
 # Upload Data library, and assign it to a variable
@@ -97,7 +97,7 @@ The next method uses the 'read.table()' function, filling creating 'NA' entries 
 df <- read.table('~/Desktop/dubjay-bioinformatics/Chapters9-10/egfr_flank.fasta',header=FALSE,sep="|",fill=TRUE)
 ```
 
-The final method is specific for FASTA files, using the 'Biostrings' library and 'readDNAStringSet()'. Most specialized can sometimes mean least robust, thoughh also less prone to error.
+The final method is specific for FASTA files, using the 'Biostrings' library and 'readDNAStringSet()'. Most specialized can sometimes mean least robust, though also less prone to error.
 ```{r}
 # Upload library
 library("Biostrings")
@@ -120,9 +120,9 @@ Here, we go through the laborious process of
 
 # Upload FASTQ file, identify indices of name, sequence, and score information
 fastq <- read.table('~/Desktop/dubjay-bioinformatics/Chapters9-10/contam.fastq',header=FALSE,sep="|",fill=TRUE)
-name <- seq(1, length(fasta$V1), by=4)
-seq <- seq(2, length(fasta$V1), by=4)
-score <- seq(4, length(fasta$V1), by=4)
+name <- seq(1, length(fastq$V1), by=4)
+seq <- seq(2, length(fastq$V1), by=4)
+score <- seq(4, length(fastq$V1), by=4)
 
 # Save name, sequence, and score character information into vectors, create placeholder for score value
 Name <- fastq$V1[name]
@@ -136,7 +136,7 @@ fastq_data <- data.frame(Name, Sequence, Score_char)
 # Split each score character string
 # Transform score from character to ASCII number to PHRED number
 # Save sequence scores in list in Score_val
-for (x in length(fastq_data$Name)){
+for (each in fastq_data$Score_char){
   score_num = c()
   char <- unlist(str_split(each,""))
   for (a in char){
@@ -144,7 +144,6 @@ for (x in length(fastq_data$Name)){
   }
   Score_val <- append(Score_val,list(score_num))
 }
-
 # Add each list of score values to a column in the dataframe
 for (i in 1:(length(Score_val))){
   fastq_data$Score_val[i] <- list(Score_val[i])
