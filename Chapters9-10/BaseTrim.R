@@ -1,4 +1,5 @@
 # trim_qual.R -- explore base qualities before and after trimming
+install.packages("qrqc")
 library(qrqc)
 # FASTQ files
 fqfiles <- c(none="untreated1_chr4.fq",
