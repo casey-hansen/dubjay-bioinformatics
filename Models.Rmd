@@ -1,0 +1,158 @@
+---
+title: "Modeling"
+output: pdf_document
+date: "2022-11-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+options(na.action = na.warn)
+```
+
+# Simple Model
+```{r cars}
+ggplot(sim1, aes(x,y)) + geom_point
+```
+
+# Model Fit
+```{r}
+models <- tibble(
+  a1 = runif(250,-20,40),
+  a2 = runif(250,-5,5)
+)
+ggplot(sim1, aes(x,y)) + geom_abline(aes intercept = a1, slope=a2, data = models, alpha=1/4) +
+  geom_point()
+)
+```
+
+# Distance Calculation
+```{r}
+model1 <- function(a, data){
+  a[1] + data$x * a[2]
+}
+
+model1(c(7, 1.5), sim1)
+
+measure_distance <- function(mod, data){
+  diff <- data$y - model1(mod,data)
+  sqrt(mean(diff^2))
+}
+
+measure_distance(c(7,1.5),sim1)
+```
+
+# Multiple Distance Calculations
+```{r}
+sim1_dist <- function(a1,a2){
+  measure_distance(c(a1,a2),sim1)
+}
+
+models <- models %>%
+  mutate(dist = purr::map2_dbl(a1,a2,sim1_dist))
+models
+```
+
+# Top Ten Models
+```{r}
+ggplot(sim1, aes(x,y)) + 
+  geom_point(size=2, color="grey30") +
+  geom_abline(aes(intercept=a1, slope=a2,color=-dist),data=filter(models,rank(dist)<=10))
+```
+
+# Simple Predictions
+```{r}
+grid <- simi1 %>% 
+  data_grid(x)
+
+grid <- grid %>%
+  add_predictions(sim1_mod)
+
+ggplot(sim1,aes(x)) +
+  geom_point(aes(y=y)) +
+  geom_line(
+    aes(y=pred),
+    data=grid,
+    color="red"
+    size=1
+  )
+```
+
+# Plot Residuals
+```{r}
+sim1 <- sim1 %>%
+  add_residuals(sim1_mod)
+
+ggplot(sim1, aes(resid)) +
+  geom_freqpoly(binwidth=0.5)
+```
+
+# Categorical Modeling
+```{r}
+ggplot(sim2) + geom_point(aes(x,y))
+```
+
+```{r}
+mod2 <- lm(y ~ x, data=sim2)
+
+grid <- sim2 %>%
+  data_grid(x) %>%
+  add_predictions(mod2)
+
+ggplot(sim2, aes(x)) +
+  geom_point(aes(y=y)) +
+  geom_point(
+    data=grid,
+    aes(y=pred),
+    color="red",
+    size=4
+  )
+```
+
+# Mixed Interactions
+```{r}
+ggplot(sim3,aes(x1,y)) + geom_point(aes(color=x2))
+```
+
+```{r}
+#Estimate effects of x1 and x2 independently
+mod1 <- lm(y ~ x1 + x2, data=sim3)
+#Estimate effects of an interaction between x1 and x2
+mod1 <- lm(y ~ x1 * x2, data=sim3)
+
+grid <- sim3 %>%
+  data_grid(x1, x2) %>%
+  gather_predictions(mod1, mod2)
+
+ggplot(sim3, aes(x1, y, color = x2)) +
+  geom_point() +
+  geom_line(data = grid, aes(y=pred)) +
+  factet_wrap(~ model)
+
+```
+
+# Continuous Interactions
+```{r}
+mod1 <- lm(y ~ x1 + x2, data = sim4)
+mod1 <- lm(y ~ x1 * x2, data = sim4)
+
+grid <- sim4 %>%
+  data_grid(
+    x1 = seq_range(x1, 5),
+    x2 = seq_range(x2, 5)
+  ) %>%
+  gather_predictions(mod1, mod2)
+
+ggplot(grid, aes(x1,x2)) +
+  geom_tile(aes=fill=pred) +
+  facet_wrap(~ model)
+```
+
+```{r}
+ggplot(grid, aes(x1, pred, color=x2, group=x2)) +
+  geom_line() + facet_wrap(~ model)
+ggplot(grid, aes(x2, pred, color=x1, group=x1)) +
+  geom_line() + facet_wrap(~ model)
+```
+
