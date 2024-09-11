@@ -1,0 +1,33 @@
+---
+title: "Homework 1"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework Template
+
+This is a template for your homework assignments in BIO-247/BIO-100: Introduction to Bioinformatics. For each homework assignment, you want to be sure to reference which question from the Knowleddge Check-in you're answering. To do that, head each question with the lecture number and the Check-in question number. For example, if you're answering the 2nd Knowledge Check-in question from Lecture 3, your homework will look like:
+
+### 3.2
+
+<YOUR ANSWER HERE>
+
+Or, if your answer includes some code, your homework would look like
+
+### 3.2
+
+```{r cars}
+# Your code here
+```
+
+<ADDITIONAL EXPLANATION HERE>
+
+## Formatting requirements
+
+-   Your homework must be submitted as a single document
+-   Your homework must be rendered into a PDF or DOCX. *Do not submit your raw `.Rmd` file*
