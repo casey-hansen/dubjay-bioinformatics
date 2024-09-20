@@ -1,0 +1,129 @@
+---
+title: "Modeling"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+## Preamble
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(tidyverse)
+library(stringr)
+library(readxl)
+library(readr)
+library(modelr)
+options(na.action = na.warn)
+
+# libary for color palatte packages - *must* be in quotes
+library("RColorBrewer")
+```
+
+## Taking a Wild Crack at modeling
+
+```{r echo=TRUE, message=FALSE}
+#Upload data, save into dataframe named 'digestion' - add missing code
+
+
+# Create randomized slopes and y-intercepts
+models <- tibble(
+  a1 = runif(250, -20, 40),
+  a2 = runif(250, -5, 5)
+)
+
+# Plot data along with lines created by the randomized slopes and intercepts
+ggplot(digestion, aes(prot.1, prot.z)) +
+  geom_abline(
+    aes(intercept = a1, slope = a2),
+    data = models, alpha = 1/4
+  ) +
+  geom_point()
+```
+
+## Step 1: Turn model family into R function
+
+```{r}
+# Create function for model
+model1 <- function(a, data){
+  a[1] + data$prot.1 * a[2]
+}
+
+# Run model on digestion data with slope of 1.5, intercept of 7
+model1(c(7,1.5),digestion)
+```
+
+## Step 2: Using RMS to calculate distance between model and data
+
+```{r}
+
+# Create function to measure distance
+measure_distance <- function(mod, data){
+  diff <- data$prot.z - model1(mod,data)
+  sqrt(mean(diff^2))
+}
+
+# Measure distance from previously created model
+measure_distance(c(7, 1.5), digestion)
+
+# Measure distance from randomly defined slopes and y-intercepts
+# This requires from looping and tibbling (let's just call it magic)
+digest_dist <- function(a1, a2) {
+  measure_distance(c(a1, a2), digestion)
+}
+
+models <- models %>%
+  mutate(dist = purrr::map2_dbl(a1, a2, digest_dist))
+
+models
+```
+
+## Find 10 best models
+```{r}
+ggplot(digestion, aes(prot.1, prot.z)) +
+  geom_point(size = 1, color = "grey30") +
+  geom_abline(aes(intercept = a1, slope = a2, color = -dist),
+              data = filter(models, rank(dist) <= 10))
+```
+
+## Newton-Raphson search
+```{r}
+# More magic
+best <- optim(c(0,0), measure_distance, data = digestion)
+best$par
+
+ggplot(digestion, aes(prot.1, prot.z)) +
+  geom_point(size = 2, color = "grey30")+
+  geom_abline(intercept = best$par[1], slope = best$par[2])
+```
+
+## Predictions
+
+In our case, since our example is linear, the prediction will look the same. But it's important to know how to create them in you're looking for a more complicated function
+```{r}
+grid <- digestion %>%
+  data_grid(prot.1)
+
+# When searching for a linear model, you can also make use of the much simpler 
+# lm() function
+digest_mod <- lm(prot.z ~ prot.1, data = digestion)
+
+# Here we call on the add_predictions() function from modelr
+grid <- grid %>%
+  add_predictions(digest_mod)
+
+ggplot(digestion, aes(prot.1)) +
+  geom_point(aes(y = prot.z)) +
+  geom_line(aes(y = pred), data = grid, color = 'red', size = 1)
+
+```
+
+## Residuals
+```{r}
+digestion <- digestion %>%
+  add_residuals(digest_mod)
+
+ggplot(digestion, aes(resid)) +
+  geom_freqpoly(binwidth=0.5)
+```
+
