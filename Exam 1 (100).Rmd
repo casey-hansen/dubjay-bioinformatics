@@ -1,0 +1,187 @@
+---
+title: "Exam 1 (BIO-100)"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# Introduction
+
+Welcome to Exam 1. This exam has 2 parts: Part 1 is analysis, where you will think about and use concepts discussed in class. You will not need to write any code for Part 1. Part 2 is skills, where you will demonstrate knowledge of skills acquired in class.
+
+When you submit your exam, you will submit your rendered R Markdown file. Submission files should have the following format: `LastName_Exam1_BIO247.pdf` or `LastName_Exam1_BIO247.docx`. Remember that if you get stuck and cannot complete a problem, highlight the entire coding block, then go to the top toolbar `Code > Comment/Uncomment Lines` to 'silence' your code while still including your work for partial credit.
+
+On this exam, you may use:
+
+-   your notes
+-   any resources from the Sakai pages, github repositories, or teams page
+-   the internet (if you use something from the internet, be sure to use the citation format as shown in `5_pep8_guidelines.R`)
+-   **NOTE: remember that even if you get the code from an online source, you must properly comment the code as if you wrote it yourself**
+
+## Part 1: Analysis
+
+### Question 1 (10 points)
+
+*What is* ***Rule #1*** *(2 pts), What is our* ***number 1 goal*** *in this class (2 pts), and why are they each important (6 points)?*
+
+[type answer here]
+
+### Question 2 (5 points)
+
+*In your own words, describe the difference between robust and reproducible*
+
+[type answer here]
+
+### Question 3 (5 points)
+
+*In your own words, describe the importance of adding comments to your code*
+
+[type answer here]
+
+### Question 4 (5 points)
+
+*Look up the function str_detect(). What library is required for its use? What arguments does the function take (don't just list the arguments, describe them)?*
+
+[type answer here]
+
+### Question 5 (10 points)
+
+*Read the following abstract describing a scientific study. Is the study robust (2)? Why or why not (3)? Is the study reproducible (2)? Why or why not (3)?*
+
+[type answer here]
+
+### Question 6 (10 points)
+
+*Read the following abstract describing a scientific study. Is the study robust (2)? Why or why not (3)? Is the study reproducible (2)? Why or why not (3)?*
+
+[type answer here]
+
+## Part 2 - Skills
+
+**NOTE: 20% of the points for each question come from your added comments**
+
+### Preamble (5 points)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Preamble - don't forget to add your libraries here! Your code will not render
+# without them
+
+
+```
+
+### Question 7 (5 points)
+
+*You have a vector of interactions:* `interact <- rep("interactions",25)` \*You want indicate the interactions as either positive (using the suffix ’\_1’) or negative (using the suffix ’\_0’). You want to alternate between positive and negative interactions for use in a dataframe). Add these suffixes to the vector.\*
+
+**NOTE: You will use the “paste()” function which has the following syntax:** `vect2 <- paste (vect1, vect3, sep=” ”)` **where vect1 is the vector of leading characters, vect3 is the vector of suffixes, and sep is the separator between the two vector values.**
+
+```{r Question 7}
+# Set up vector of interactions - DO NOT TOUCH THIS CODE
+interact <- rep("interactions",25)
+
+# Type your answer directly below this comment
+
+```
+
+
+### Question 8 (35 points)
+
+The following questions relate to coffee survey data. You've been brought in as business consultant to make choices on coffee ordering. Graphing portions of this question will be graded on:
+
+-   correct code (5)
+-   comments (2)
+-   style adjustments, so that the graphs look professional (3)
+
+```{r Question 8 Pre}
+# Upload data - DO NOT CHANGE THIS CODE
+coffee_survey <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-14/coffee_survey.csv')
+```
+
+**[A] (5 points)** *Change the column names to make them easier to reference for your graphs below. Make sure that your new column names are still descriptive of their contents*
+
+```{r Question 8A}
+# Type your answer for 8[A] here
+```
+
+**[B] (10 points)** *Create a heatmap of favorite coffee drink vs. dairy.*
+
+```{r Question 8B}
+# Type your answer for 8[B] here
+```
+
+**[C] (10 points)** *create a graph to view overall favorite coffee vs strength of coffee*
+
+```{r Question 8C}
+# Type your answer for 8[C] here
+```
+
+**[D] (10 points)** *Find the average cost consumers are willing to spend on cafe coffee*
+
+```{r Question 8D}
+# Type your answer for 8[C] here
+```
+
+[Answer average cost here]
+
+### Question 9 (30 points)
+
+The following questions relate to data from a 1757 scurvy study.
+
+```{r Question 9 Pre}
+# Data Upload - DO NOT TOUCH THIS CODE
+scurvy <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-07-25/scurvy.csv')
+```
+
+**[A] (5 points)** *calculate the number of patients with gum rot (yum!)*
+
+```{r Question 9A}
+# Type your answer for 9[A] here
+```
+
+**[B] (10 points)** *Using data visualization, determine if there's a relationship between skin sores and weak knees*
+
+```{r Question 9B}
+# Type your answer for 9[B] here
+```
+
+**[C] (15 points)** *Use data visualization to find the best treatment for scurvy*
+
+```{r Question 9C}
+# Type your answer for 9[C] here
+```
+
+### Question 10 (30 points)
+
+The following questions relate to birth days of canadian hockey players
+
+```{r Question 10 Pre}
+# Data Upload - DO NOT TOUCH THIS CODE
+canada_births_1991_2022 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-01-09/canada_births_1991_2022.csv')
+nhl_player_births <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-01-09/nhl_player_births.csv')
+nhl_rosters <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-01-09/nhl_rosters.csv')
+```
+
+**[A] (10 points)** *Plot distribution of birthdays of the hockey players*
+
+```{r Question 10A}
+# Type your answer for 10[A] here
+```
+
+
+**[B] (10 points)** *Determine is there is a correlation between birthday and height in inches*
+
+```{r Question 10B}
+# Type your answer for 10[B] here
+```
+
+[Type your analysis here - is there a correlation?]
+
+**[C] (10 points)** Determine the team with the oldest average age of players
+
+```{r Question 10C}
+# Type your answer for 10[C] here
+```
+
+[Type your analysis here - which team has the oldest average?]

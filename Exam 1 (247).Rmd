@@ -1,0 +1,188 @@
+---
+title: "Exam 1 (BIO-247)"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+# Introduction
+
+Welcome to Exam 1. This exam has 2 parts: Part 1 is analysis, where you will think about and use concepts discussed in class. You will not need to write any code for Part 1. Part 2 is skills, where you will demonstrate knowledge of skills acquired in class.
+
+When you submit your exam, you will submit your rendered R Markdown file. Submission files should have the following format: `LastName_Exam1_BIO247.pdf` or `LastName_Exam1_BIO247.docx`. Remember that if you get stuck and cannot complete a problem, highlight the entire coding block, then go to the top toolbar `Code > Comment/Uncomment Lines` to 'silence' your code while still including your work for partial credit.
+
+On this exam, you may use:
+
+-   your notes
+-   any resources from the Sakai pages, github repositories, or teams page
+-   the internet (if you use something from the internet, be sure to use the citation format as shown in `5_pep8_guidelines.R`)
+-   **NOTE: remember that even if you get the code from an online source, you must properly comment the code as if you wrote it yourself**
+
+## Part 1: Analysis
+
+### Question 1 (10 points)
+
+*What is* ***Rule #1*** *(2 pts), What is our* ***number 1 goal*** *in this class (2 pts), and why are they each important (6 points)?*
+
+[type answer here]
+
+### Question 2 (5 points)
+
+*In your own words, describe the difference between robust and reproducible*
+
+[type answer here]
+
+### Question 3 (5 points)
+
+*In your own words, describe the importance of adding comments to your code*
+
+[type answer here]
+
+### Question 4 (5 points)
+
+*Look up the function str_detect(). What library is required for its use? What arguments does the function take (don't just list the arguments, describe them)?*
+
+[type answer here]
+
+### Question 5 (10 points)
+
+*Read the following abstract describing a scientific study. Is the study robust (2)? Why or why not (3)? Is the study reproducible (2)? Why or why not (3)?*
+
+[type answer here]
+
+### Question 6 (10 points)
+
+*Read the following abstract describing a scientific study. Is the study robust (2)? Why or why not (3)? Is the study reproducible (2)? Why or why not (3)?*
+
+[type answer here]
+
+## Part 2 - Skills
+
+**NOTE: 20% of the points for each question come from your added comments**
+
+### Preamble (5 points)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Preamble - don't forget to add your libraries here! Your code will not render
+# without them
+
+
+```
+
+### Question 7 (5 points)
+
+*You have a vector of interactions:* `interact <- rep("interactions",25)` \*You want indicate the interactions as either positive (using the suffix ’\_1’) or negative (using the suffix ’\_0’). You want to alternate between positive and negative interactions for use in a dataframe). Add these suffixes to the vector.\*
+
+**NOTE: You will use the “paste()” function which has the following syntax:** `vect2 <- paste (vect1, vect3, sep=” ”)` **where vect1 is the vector of leading characters, vect3 is the vector of suffixes, and sep is the separator between the two vector values.**
+
+```{r Question 7}
+# Set up vector of interactions - DO NOT TOUCH THIS CODE
+interact <- rep("interactions",25)
+
+# Type your answer directly below this comment
+
+```
+
+### Question 8 (35 points)
+
+The following questions relate to the planting, harvesting, and price data for crops in 2020. You've been brought in as an agricultural scientist to help inform the company Big Ag on best practices for planting. Graphing portions of this question will be graded on:
+
+-   correct code (5)
+-   comments (2)
+-   style adjustments, so that the graphs look professional (3)
+
+```{r Question 8 Pre}
+# Upload data - DO NOT CHANGE THIS CODE
+harvest_2020 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/harvest_2020.csv')
+planting_2020 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/planting_2020.csv')
+spending_2020 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-05-28/spending_2020.csv')
+```
+
+**[A] (5 points)** *Change the column names to make them easier to reference for your graphs below. Make sure that your new column names are still descriptive of their contents*
+
+```{r Question 8A}
+# Type your answer for 8[A] here
+```
+
+**[B] (10 points)** *Create a heatmap of the vegetable planted vs. the harvest weight.*
+
+```{r Question 8B}
+# Type your answer for 8[B] here
+```
+
+**[C] (10 points)** *create a graph to view the vegetable type versus its price (including taxes)*
+
+```{r Question 8C}
+# Type your answer for 8[C] here
+```
+
+**[D] (10 points)** *Calculate the cost-to-production ratio to determine which vegetable is the most profitable*
+
+```{r Question 8D}
+# Type your answer for 8[C] here
+```
+
+[Answer most profitable vegetable here]
+
+### Question 9 (30 points)
+
+The following questions relate to patient risk profile data, a massive data set outlining the medical data and calculated risk of 100 patients.
+
+```{r Question 9 Pre}
+# Data Upload - DO NOT TOUCH THIS CODE
+patient_risk_profiles <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-10-24/patient_risk_profiles.csv')
+```
+
+**[A] (5 points)** *calculate the number of female patients from 10-19 years old*
+
+```{r Question 9A}
+# Type your answer for 9[A] here
+```
+
+**[B] (10 points)** *Using data visualization, determine the age group at greatest risk for anxiety*
+
+```{r Question 9B}
+# Type your answer for 9[B] here
+```
+
+**[C] (15 points)** *Use data visualization to find the condition that is the greatest risk for patients aged 45-49*
+
+```{r Question 9C}
+# Type your answer for 9[C] here
+```
+
+### Question 10 (30 points)
+
+The following questions relate to squirrel data. Yes, squirrels. You can tell a lot about an ecosystem from the wee beasties that live in it.
+
+```{r Question 10 Pre}
+# Data Upload - DO NOT TOUCH THIS CODE
+squirrel_data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-05-23/squirrel_data.csv')
+
+```
+
+**[A] (10 points)** *Plot the locations (longitude/latitude) of the squirrels in central park. Style your graph to ditinsguish between the different colors of squirrel. This will check to see if squirrels self-select for fur color in their breeding, which might indicate that fur color has an influence on mating choices.*
+
+```{r Question 10A}
+# Type your answer for 10[A] here
+```
+
+
+**[B] (15 points)** Kuks, Quaas, and Moans are the 3 primary squirrel vocalizations. Using data visualization, determine how location (general location, not the specific long/lat) relates to vocalizations.
+
+```{r Question 10B}
+# Type your answer for 10[B] here
+```
+
+[Type your analysis here - how does location relate to vocalization?]
+
+**[C] (5 points)** Plot the distribution of squirrel ages.
+
+```{r Question 10C}
+# Type your answer for 10[C] here
+```
+
