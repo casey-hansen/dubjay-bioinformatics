@@ -1,0 +1,127 @@
+---
+title: "Lecture 12 - EDA Part 2"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+
+# Upload the relevant data for today's lecture
+tick.df <- read_csv('tick_data.csv')
+```
+
+### Variation
+```{r}
+
+ggplot(data = tick.df, aes(x=species)) + 
+  geom_bar() +
+  labs(x="Species", y="Count") + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+```
+
+### Histograms can show multiple variations
+```{r}
+
+# It is possible to assign plots to a variable to be used later, as shown here
+
+bin3 <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_histogram(binwidth = 0.33)
+
+bin100 <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_histogram(binwidth = 0.01)
+
+ggarrange(bin3, bin100, 
+          labels = c("3 bins", "100 bins", "C"),
+          ncol = 2, nrow = 1)
+```
+
+### Let’s ask a question about tick engorgement
+```{r}
+ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_freqpoly(mapping = aes(color=stage),binwidth=0.01)
+```
+
+### Engorgement at 1% bin widths
+```{r}
+ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_histogram(binwidth = 0.01)
+```
+
+### Old Faithful Eruptions
+```{r}
+# Now we use the built-in R data set `faithful`
+ggplot(data = faithful, mapping=aes(x=eruptions)) + 
+  geom_histogram(binwidth = 0.25)
+```
+
+### What about outliers in histograms?
+```{r}
+bin_full <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_histogram(binwidth = 0.01)
+
+bin_zoom <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_histogram(binwidth = 0.01) + 
+  coord_cartesian(ylim=c(0,50))
+
+ggarrange(bin_full, bin_zoom, 
+         labels = c("", ""),
+         ncol = 2, nrow = 1)
+```
+
+### Histogram vs. Density
+```{r}
+hist_tick <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_freqpoly(mapping = aes(color=stage),binwidth=0.01)
+
+dens_tick <- ggplot(data = tick.df, mapping=aes(x=engorgement)) + 
+  geom_density(mapping = aes(color=stage))
+
+ggarrange(hist_tick, dens_tick, 
+         labels = c("", ""),
+         ncol = 2, nrow = 1)
+```
+
+### Comparing 2 continuous variables
+```{r}
+ggplot(data = tick.df)+
+  geom_point(mapping = aes(x = host.temp, 
+             y=engorgement),color='blue',shape=18) +
+  labs(x="Host Temperature (F)",y="Engorgement (%)") +
+  theme(text = element_text(size = 20))
+
+
+
+
+# The second graph was posted to r/dataisbeautiful, created byu/-Montse-
+
+```
+
+### Comparing 2 categorical variables
+```{r}
+
+ggplot(data = tick.df) +
+  geom_bar(mapping = aes(x=species, fill = host))
+
+
+tick.df %>%
+
+    count(host, species) %>%
+
+ggplot(mapping = aes(x = host, y = species)) + 
+  geom_tile(mapping = aes(fill = n),colour = 'white') +
+  theme_classic() +
+  scale_fill_gradient(low="#CC0063",high="#3300CC",guide="legend") +
+  labs(name="count") + 
+  geom_text(aes(label = n)) +
+  labs(x = "Host", y="Tick Species")+theme(text = element_text(size = 16))
+
+```
+
