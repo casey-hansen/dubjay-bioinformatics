@@ -1,0 +1,88 @@
+---
+title: "Lecture 15 - Sequence Analysis"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Necessary package for installation of analysis packages
+if(!require(BiocManager)) install.packages("BiocManager")
+
+#Install the BioStrings Package
+BiocManager::install("Biostrings")
+library(Biostrings)
+
+#Install DECIPHER package
+if(!require(DECIPHER)) BiocManager::install("DECIPHER")
+library(DECIPHER)
+
+#MSA package
+BiocManager::install("msa")
+library(msa)
+```
+
+
+### Analysis
+```{r}
+
+#define your own sequence
+my.seq <- DNAString('<SEQUENCE>')
+
+# return the length of your sequence
+length(my.seq)
+
+# find the "GC" content of the sequence
+letterFrequency(seq, "GC", as.prob = T)
+```
+
+```{r}
+# analyze data from a fasta file
+fastaFile <- readDNAStringSet('seq1.fa')
+#
+names(fastaFile)
+#
+paste(fastaFile)
+#
+width(fastaFile)
+```
+
+### Coding transcription
+```{r}
+#
+r_comp <- reverseComplement(my.seq)
+#
+str_replace(r_comp, 'T','U')
+```
+
+
+### We can even translate automatically!
+```{r}
+my.seq2 <- DNAString('<SEQUENCE>')
+translate(my.seq2)
+```
+
+# Sequence Alignment
+```{r}
+# Reminder of our fasta file
+fastaFile <- readDNAStringSet("seq1.fa")
+translate(fastaFile)
+
+# comparing just the first 2 sequences in the file
+pairwiseAlignment(fastaFile[1], fastaFile[2])
+
+# Comparing all sequences using msa() function
+first.alignment <- msa(translate(fastaFile))
+print(first.alignment, show="complete") 
+
+# Print out alignment results as PDF
+msaPrettyPrint(FirstAlignment, output="pdf",
+               showNames="none",
+               showLogo="none",   
+               askForOverwrite=FALSE,  
+               verbose=FALSE)
+
+```
+
