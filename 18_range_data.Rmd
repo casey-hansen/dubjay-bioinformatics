@@ -1,0 +1,115 @@
+---
+title: "18 - gRange Data"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Necessary package for installation of analysis packages
+if(!require(BiocManager)) install.packages("BiocManager")
+
+# Introduce Range Data Package (yes the installation should be different from the library)
+BiocManager::install("GenomicRanges")
+library(IRanges)
+
+# Rafalib package
+if(!require(rafalib)) install.packages("rafalib")
+library(rafalib)
+
+# don't forget to plot!
+if(!require(ggplot2)) install.packages("ggplot2")
+library(ggplot2)
+```
+
+## Introduction
+
+```{r}
+# You can make a simple set of ranges as a group
+range1 <- IRanges(start=100 + 1:5, width=10)
+# Or as an individual range
+range2 <- IRanges(start=4, end=13)
+```
+
+## Visualizing Ranges
+
+```{r}
+#PLOTTING RANGES TO SHOW RANGES
+#Define Ranges by start/end
+rng3 <- IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 2, 23))
+# Plot ranges as lines
+nullplot(start(range(rng3)), end(range(rng3))+1, 0, 6, xaxt="n") 
+abline(v=100:115, col="grey")
+axis(1, at=100:115 + .5, labels=100:115)
+arrows(start(rng3),seq_along(rng3),end(rng3)+1,seq_along(rng3),
+                                                lwd=3,code=3,angle=90,length=.05)
+
+#PLOTTING RANGES TO SHOW OVERLAP
+# Define same ranges
+x <- IRanges(start=c(4, 7, 2, 20), end=c(13, 7, 2, 23)) 
+# Name the ranges
+names(x) <- letters[1:4]
+
+# Housekeeping - defining boundaries so graph looks nice 
+sep=0.5
+height=0.5
+
+# Convert ranges to dataframe for ease of reference
+out <- as.data.frame(x)
+out$y <- disjointBins(x)
+out$ymin <- out$y * (sep + height) - height 
+out$ymax <- out$ymin + height
+xmin <- min(out$start)
+xmax <- max(out$end)
+xbreaks <- seq(xmin - 1L, xmax + 1L)
+
+# Plot the ranges
+ggplot(out) +
+geom_rect(aes(ymin=ymin, ymax=ymax, xmin=start-0.5, xmax=end+0.5)) + geom_text(aes(x=start + width/2 - 0.5, y=ymin+(ymax-ymin)/2, label=names),
+size=8, color="grey") +
+scale_x_continuous(breaks=xbreaks) + xlab("") + ylab("") + theme(axis.text.y=element_blank()) + theme(panel.grid.major=element_blank(), panel.grid.minor.y=element_blank(),
+axis.ticks=element_blank())
+```
+
+## Overlapping Ranges
+
+```{r}
+set.seed(0)
+rng4 <- IRanges(start = sample(seq_len(50),20), width = 5)
+head(rng4, 4)
+reduce(rng4)
+
+# Or to show gaps in the data
+gaps(rng4)
+```
+
+## Defining the Overlap
+
+```{r}
+rng3 <- IRanges(start=c(4, 12), end=c(13, 17))
+
+# Plot ranges as lines
+nullplot(start(range(rng3)), end(range(rng3))+1, 0, 6, xaxt="n") 
+abline(v=100:115, col="grey")
+axis(1, at=100:115 + .5, labels=100:115)
+#note how code is separated over 2 line to stay in the width limit
+arrows(start(rng3),seq_along(rng3),end(rng3)+1,seq_along(rng3),
+       lwd=3,code=3,angle=90,length=.05)
+```
+
+## Distance Between Ranges
+
+```{r}
+qry <- IRanges(start = 6, end = 13, names = 'query')
+sbj <- IRanges(start = c(2, 4, 18, 19), end = c(4, 5, 21, 24), names = 1:4)
+```
+
+## Range searching
+
+```{r}
+nearest(qry, sbj)
+precede(qry, sbj)
+follow(qry, sbj)
+```
