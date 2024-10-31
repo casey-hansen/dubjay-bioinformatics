@@ -1,0 +1,173 @@
+---
+title: "Exam 2"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+# Introduction
+
+Welcome to Exam 2. This Exam is 100 points, 3 questions. Each question has multiple parts, so make sure you're answering all parts of the question.
+
+When you submit your exam, you will submit your rendered R Markdown file. Submission files should have the following format: `LastName_Exam1_BIO247.pdf` or `LastName_Exam1_BIO247.docx`. Remember that if you get stuck and cannot complete a problem, highlight the entire coding block, then go to the top toolbar `Code > Comment/Uncomment Lines` to 'silence' your code while still including your work for partial credit.
+
+On this exam, you may use:
+
+-   your notes
+-   any resources from the Sakai pages, github repositories, or teams page
+-   the internet (if you use something from the internet, be sure to use the citation format as shown in `5_pep8_guidelines.R`)
+-   **NOTE: remember that even if you get the code from an online source, you must properly comment the code as if you wrote it yourself**
+
+# Preamble (5 points)
+
+In this exam, you are graded not only on your methods, but on your style. Commenting is an important part of writing code and solving problems. For each exam problem, including sufficient comments within your code is worth 5 points for each question.
+
+Assembling your preamble is also an important skill. I have given you the majority of the packages you need for this exam. It is your responsibility to add any other necessary packages to your preamble. Be sure to comment where you have added additional packages.
+
+```{r setup, include=FALSE}
+# DO NOT ERASE THIS LINE OF CODE
+knitr::opts_chunk$set(echo = TRUE)
+if(!require(tidytuesdayR)) install.packages("tidytuesdayR")
+if(!require(ape)) install.packages("ape")
+if(!require(phangorn)) install.packages("phangorn")
+if(!require(phytools)) install.packages("phytools")
+if(!require(geiger)) install.packages("geiger")
+if(!require(phylogram)) install.packages("phylogram")
+if(!require(remotes)) install.packages("remotes")
+if(!require(BiocManager)) install.packages("BiocManager")
+if(!require(ggtree)) BiocManager::install("ggtree")
+if(!require(DECIPHER)) BiocManager::install("DECIPHER")
+if(!require(adegenet)) BiocManager::install("adegenet")
+if(!require(viridis)) BiocManager::install("viridis")
+
+library(ape)
+library(phytools)
+library(phangorn)
+library(geiger)
+library(phylogram)
+library(seqinr)
+library(adegenet)
+library(ggtree)
+library(viridis)
+```
+
+# Question 1 (35 points)
+
+You've been given a spreadsheet from a WV vet, asking you to run analysis on their last month of data. They want to know information about the location of the clients they serve and any important trends in patient health.
+
+### 1A (3 points)
+
+Upload the data from the file `vet_data.csv`
+
+```{r Question 1A}
+# Type answer here
+```
+
+### 1B (7 points)
+
+Next, you'll need to convert the client address to longitude and latitude so that you can plot the figure for GIS analysis. You can do this by uploading your data file to a website like [Geoapify](https://www.geoapify.com/tools/geocoding-online/) (or any other online service, there are several). When you make this conversion, you will download a new data file that has longitude and latitude columns. These files usually have ungainly names - I highly recommend you change it.
+
+Upload your newly-minted location data (don't forget to put it in the right folder!)
+
+```{r Question 1B}
+# Type answer here
+```
+
+### 1C (10 points)
+
+Plot your location data on a map of WV (Don't reinvent the wheel, you have code already to help with this). Color-code your plot points using one of columns in the vet data (species, breed, age, diagnosis, etc).
+
+```{r Question 1C}
+# Type answer here
+```
+
+### 1D (5 points)
+
+Is there a pattern in the location of the data you analyzed in Part (C)? How can you tell?
+
+<Type your answer here>
+
+# Question 2 (28 points)
+
+You're asked to analyze various proteins related to tumor growth in humans. You're hoping to identify some of the properties of these proteins to understand how they work. Complete the following analysis to come to your conclusions.
+
+### 2A (5 points)
+
+Choose 2 of the groups used to define amino acids. List the name of the group, the main characteristics, and what role they play in the formation of proteins.
+
+<Type your answer here>
+
+### 2B (3 points)
+
+Upload the protein sequence data from `tumor_proteins.fasta`
+
+```{r Question 2B}
+# Type Answer Here
+```
+
+### 2C (5 points)
+
+Print out the names of the sequences in the data file
+
+```{r Question 2C}
+# Type Answer Here
+```
+
+### 2D (5 points)
+
+Run protein statistics on two of the proteins in your data set to see the composition
+
+```{r Question 2D}
+# Type Answer Here
+```
+
+### 2E (5 points)
+
+From your protein statistics output, what can you say about the properties of your chosen proteins?
+
+<Type your answer here>
+
+# Question 3 (37 points)
+
+You are working on a project studying the biodiversity of the Gray Fox (*Urocyon niereoargenteus*) in the United states. You have paired up with field scientists who have collected samples, and processed them using PCR methods to produce genetic sequences. They have sent you the file `gray_fox_sequence_data.FASTA` containing these sequences. Your job is to complete a phylogeny analysis of the sequence data, and report your findings back to the field scientists.
+
+### 3A (3 points)
+
+Upload the sequence data
+
+```{r Question 3A}
+# Data from Reding, et. al 2021 (Front. Ecol. Evol.)
+# Type Answer Here
+```
+
+### 3B (10 points)
+
+Orient the sequences, perform a sequence alignment, save the alignment to an intermediate file, and read in the alignment as a new sequence set (5 points)
+
+```{r Question 3B}
+# Type Answer Here
+```
+
+### 3C (3 point)
+
+Read in the aligned data
+
+```{r Question 3C}
+# Type Answer Here
+```
+
+### 3D (10 points)
+
+Calculate the distance matrix and plot the phylogenic tree
+
+```{r Question 3D}
+# Type Answer Here
+```
+
+### 3E (6 points)
+
+Do you notice any clusters in the analysis of this data? If so, how many? What might this mean about the biodiversity of the samples?
+
+<Type answer here>
