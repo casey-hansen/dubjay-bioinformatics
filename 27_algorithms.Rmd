@@ -1,0 +1,127 @@
+---
+title: "Algorithms"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# graphing package
+library(ggplot2) 
+# cool stuff packages (easier to access variables)
+library(tidyverse)
+library(stringr)
+# packages for reading spreadsheets
+library(readxl)
+library(readr)
+#Pretty colors
+library("RColorBrewer")
+```
+
+# Return to Exam 1: major assessment
+
+### Solution 1: 2 heatmaps, one for Starting Major, one for Graduating major, comparing major to gender
+
+```{r solution1}
+
+# Upload data 
+graduate_major_info <- read_excel("graduate_major_info.xlsx")
+
+# First heatmap, starting major vs. gender
+graduate_major_info %>%
+    dplyr::count(`Starting Major`, Gender) %>%
+ggplot(mapping = aes(x = `Starting Major`, y = Gender)) + 
+  geom_tile(mapping = aes(fill = n),colour = 'white') + 
+  theme_classic() +
+  scale_fill_gradient(low="cyan",high="magenta",guide="legend") +
+  labs(x = "Starting Major", y="Gender", fill="count") +
+  theme(text = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+
+# First heatmap, graduating major vs. gender
+graduate_major_info %>%
+    dplyr::count(`Graduating Major`, Gender) %>%
+ggplot(mapping = aes(x = `Graduating Major`, y = Gender)) + 
+  geom_tile(mapping = aes(fill = n),colour = 'white') + 
+  theme_classic() +
+  scale_fill_gradient(low="yellow",high="darkgreen",guide="legend") +
+  labs(x = "Graduating Major", y="Gender", fill="count") +
+  theme(text = element_text(size = 16),
+        axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+
+
+```
+
+### Solution 2: 3 heatmaps, comparing graduating to starting
+
+```{r solution2}
+
+gender <- unique(graduate_major_info$Gender)
+low_col = c('black', 'red','green')
+high_col = c('purple','yellow','pink')
+
+# First heatmap, starting major vs. graduating major (men)
+for (i in 1:length(gender)){
+  plt1 <- graduate_major_info[graduate_major_info$Gender == gender[i],] %>%
+      dplyr::count(`Starting Major`, `Graduating Major`) %>%
+  ggplot(mapping = aes(x = `Starting Major`, y = `Graduating Major`)) + 
+    geom_tile(mapping = aes(fill = n),colour = 'white') + 
+    theme_classic() +
+    scale_fill_gradient(low=low_col[i],high=high_col[i],guide="legend") +
+    labs(x = "Starting Major", y="Graduating Major", fill="count", title = gender[i]) +
+    theme(text = element_text(size = 16),
+          axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+  print(plt1)
+  
+}
+
+```
+
+### Solution 3: Algorithm
+
+Use an algorithm to plot all three graphs from one chunk of code, use grid to ogranzie plots
+
+```{r solution3}
+
+genders <- unique(graduate_major_info$Gender)
+
+for (each in genders){
+  plt <- graduate_major_info[graduate_major_info$Gender == each,] %>%
+    dplyr::count(`Starting Major`, `Graduating Major`) %>%
+  ggplot(mapping = aes(x = `Starting Major`, y = `Graduating Major`)) + 
+    geom_tile(mapping = aes(fill = n),colour = 'white') + 
+    theme_classic() +
+    scale_fill_gradient(low="cyan",high="red",guide="legend") +
+    labs(x = "Starting Major", y="Graduating Major", fill="count", title = str_to_title(each)) +
+    theme(text = element_text(size = 16),
+            axis.text.x = element_text(angle = 90, vjust = 1, hjust=1))
+  print(plt)
+}
+
+```
+
+# Cat data analysis: Adding longitudes and latitudes for GIS analysis
+
+```{r cat_locs}
+afobc_data <- read_excel("AFOBC Pathology Data.xlsx")
+# Replace NA values with "N/A"
+afobc_data[is.na(afobc_data$Intake.Location),]$Intake.Location <- "N/A"
+# Import longs/lats for each unique location
+locations <- read_excel("afobc_locations.xlsx")
+
+# Create longitude and latitude columns in dataframe
+afobc_data$long <- 0
+afobc_data$lat <- 0
+
+# Magic - use the locations dataframe to add in the long/lat values:
+for (each in locations$Intake.Location){
+  # get index of location
+  idx <- match(each,locations$Intake.Location)
+  # add longitudes
+  afobc_data[afobc_data$Intake.Location == each,]$long <- as.numeric(locations$Long[idx])
+  # add latitudes
+  afobc_data[afobc_data$Intake.Location == each,]$lat <- as.numeric(locations$Lat[idx])
+}
+```

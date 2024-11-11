@@ -1,0 +1,84 @@
+---
+title: "Lecture 25"
+author: "Casey Hansen"
+date: '`r Sys.Date()`'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Packages for Machine Reading 
+if (!require(caret)) install.packages("caret")
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(mlbench)) install.packages("mlbench")
+if (!require(class)) install.packages("class")
+if (!require(caTools)) install.packages("caTools")
+if (!require(randomForest)) install.packages("randomForest")
+if (!require(impute)) install.packages("impute")
+if (!require(ranger)) install.packages("ranger")
+if (!require(kernlab)) install.packages("kernlab")
+if (!require(glmnet)) install.packages("glmnet")
+if (!require(naivebayes)) install.packages("naivebayes")
+if (!require(rpart)) install.packages("rpart")
+if (!require(rpart.plot)) install.packages("rpart.plot")
+if(!require(BiocManager)) install.packages("BiocManager")
+BiocManager::install("biocLite")
+
+
+library(caret)
+library(ggplot2)
+library(mlbench)
+library(class)
+library(caTools)
+library(randomForest)
+library(impute)
+library(ranger)
+library(kernlab)
+library(class)
+library(glmnet)
+library(naivebayes)
+library(rpart)
+library(rpart.plot)
+
+
+```
+
+
+# Import data 
+
+```{r}
+data(iris)
+
+data(Sonar)
+```
+
+## Unsupervised Learning
+
+
+```{r}
+i <- grep("Length", names(iris))
+new_iris <- iris[, i]
+uml <- stats::kmeans(new_iris, 3, nstart = 10)
+ggplot(data = new_iris) + 
+  geom_point(mapping = aes(x = Sepal.Length, y = Petal.Length), col = uml$cluster)
+
+ggplot(data = iris) + 
+  geom_point(mapping = aes(x = Sepal.Length, y = Petal.Length, col = Species))
+
+```
+
+# Supervised Learning
+```{r}
+set.seed(12L)
+#select random 15 numbers from 1-150
+train <- sample(150, 50)
+#do it again
+new_data <- sample(150, 50)
+library(class)
+
+knnres <- knn(iris[train,-5],iris[new_data,-5], iris$Species[train])
+table(knnres, iris$Species[new_data])
+mean(knnres == iris$Species[new_data])
+```
+
