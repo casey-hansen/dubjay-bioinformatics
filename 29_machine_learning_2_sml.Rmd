@@ -1,0 +1,73 @@
+---
+title: "Lecture 26"
+author: "BIO247/SCI100"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+
+if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(mlbench)) install.packages("mlbench")
+if (!require(class)) install.packages("class")
+
+library(ggplot2)
+library(mlbench)
+library(class)
+```
+
+1.  First we want to set up the randomization for the SML model, randomly selecting 50 numbers by which we can index the iris data:
+
+```{r}
+set.seed(12L)
+# select a random 50 numbers from 1-150
+train <- sample(150, 50)
+# and do so again
+new_data <- sample(150, 50)
+```
+
+2.  Next we want to run the SML model, using our randomized numbers to index rows from the iris data. We also want to ignore the Species column (column number 5), because those are labels, not data.
+
+```{r}
+knnres <- knn(iris[train,-5], iris[new_data,-5], iris$Species[train])
+```
+
+3.  We can then observe how well our predictions did, by creating a table comapring the predicted species from knnres to the actual species labels in the data spreadsheet. We can also calculate the accuracy as a numeric value, representing the percent of Species that were correctly determined by the model
+
+```{r}
+table(knnres, iris$Species[nw])
+mean(knnres == iris$Species[nw])
+```
+
+4.  Now let's try a new example with Sonar data. This data is used to help train a computer on classifying items using SONAR, determining if the obejct is a rock or a mine. Here, we will classify results as one of four categories:
+
+-   True Positive (prediction matches positive reference identification)
+-   False Positive (predeiction incorrectly labels data positively)
+-   True Negative
+-   False Negative
+
+First we need to set up the randomization - in this case using 60% of the Sonar data
+
+```{r}
+library("mlbench")
+data(Sonar)
+## 60/40 split
+tr <- sample(nrow(Sonar), round(nrow(Sonar) * 0.6))
+train <- Sonar[tr, ]
+test <- Sonar[-tr, ]
+```
+
+5.  Next, we generate the model that will predict the classification of objects. The `glm` function uses a *generalized linear model* to define the pattern of the training data. Next we use this model on our "test" data, used from the Sonar data.
+
+```{r}
+model <- glm(Class ~ ., data = train, family = "binomial")
+p <- predict(model, test, type = "response")
+```
+
+6.  Finally, we can set up a table to compare how our predictions compare to the recorded classification of the data
+
+```{r}
+classification <- ifelse(p > 0.5, "M", "R")
+table(classification, test$Class)
+```
