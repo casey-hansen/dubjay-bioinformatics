@@ -1,0 +1,173 @@
+---
+title: "Exam 3 - Final Exam"
+author: "Casey Hansen"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+# Exam Checklist
+Welcome to Exam 3.
+This exam is due Monday 16 December at 5:00pm. Your exam *must* be submitted as a rendered file, you may not submit a raw RMD file. 
+
+Hints:
+
+* It's better to knit your file after you finish each problem, instead of waiting until the end and hoping for the best
+* If you really just can't get a problem to work and it's time to turn in your exam, change the `eval = TRUE` argument at the top of your coding block to `eval = FALSE`. This will allow me to look at your code and give you partial credit
+
+Before you submit your exam, make sure you've done the following:
+
+1. Added the necessary libraries and packages to your preamble
+1. You commented your code (you get points for it!)
+1. You **cite** any code that you got from sources outside of class. No citation, no points
+1. You've put your name in the 'author' position at the top of this document
+
+**NOTE**: Reminder, that if you are using RStudio on your desktop (not Posit cloud), you'll need to knit your exam into HTML or WORD, _not a PDF_
+
+# Preamble (5 points)
+
+If you don't put your packages and libraries in your preamble, your file won't render!
+
+```{r setup, results='hide', messages=FALSE, warning=FALSE}
+# DO NOT ERASE THIS LINE OF CODE
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Question 1 (Machine Learning - 25 points)
+*Code comments are worth 5 points*
+
+You are an agricultural scientist working as a consultant trying to understand how crop distribution across certain countries. You're hoping that by modeling the historical data, you can learn what countries have successful planting strategies, and share them with countries that have less successful methods.
+
+You have the historical data for 11 crops over a 58-year span across 5 randomly selected countries. Generate a machine learning model from this historical data to help make recommendations to these countries for future planting. 
+
+### 1A Ccreate a dataframe using any two crops from the yield data (5 points)
+** Note: You will also need to remove any rows that have an NA value **
+```{r}
+
+### DO NOT ERASE THIS CODE
+key_crop_yields <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-01/key_crop_yields.csv')
+key_crop_yields <- key_crop_yields[is.na(key_crop_yields$Code) == FALSE,]
+idx = floor(runif(5, min=1, max=216))
+key_crop_yields <- key_crop_yields[key_crop_yields$Code %in% unique(key_crop_yields$Code)[idx],]
+### DO NOT ERASE THIS CODE
+
+```
+
+### 1B Use unsupervised learning to generate clusters of your crop data (2.5 points)
+**Note: Your number of clusters should be 5**
+```{r}
+
+```
+
+
+### 1C Plot your clustered data (5 points)
+```{r}
+
+```
+
+
+### 1D Now from the original key_crop_yields data, plot your same crops, but color-code them by country (5 points)
+```{r}
+
+```
+
+
+
+### 1E Does your model accurately represent the historical data? Which country has the least efficient planting scheme (2.5 points)?
+
+<Type Answer here>
+
+
+# Question 2 (Algorithms - 25 points)
+*Code comments are worth 5 points*
+
+You are a wildlife scientists measuring the biodiversity in each body in the Great Lakes system. You want to see which lakes have the highest/lowest biodiversity, and how robust the biodiversity is (i.e. does a species thrive in its system). A group of interested scientists and citizens have collected over 65,000 observations to aid in your study. 
+
+Find a way to compare the biodiversity for each body of water.
+
+
+### 2A define a variable that contains the bodies of water you are studying (2.5 points)
+```{r}
+### DO NOT ERASE THIS CODE
+fishing <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-06-08/fishing.csv')
+### DO NOT ERASE THIS CODE
+
+```
+
+### 2B create an algorithm that allows you to observe the biodiversity for each body of water (5 points)
+```{r}
+
+```
+
+
+### 2C As part of your algorithm, you'll want to subset the data for each body of water (5 points)
+```{r}
+
+```
+
+
+### 2D Plot the species distribution for each body of water (5 points)
+
+**HINT: You'll like want to save your plot to a variable (p <- ggplot...), and then show your plot using the print function (print(p)). Otherwise, you likely won't see your graphs **
+```{r}
+
+```
+
+### 2E What body of water has the best biodiversity, and why? (2.5 points)
+<Type answer here>
+
+
+# Question 3 (Sequencing Antibiotics - 15 points)
+*Code comments are worth 5 points*
+
+Recall that the Amino Acid Sequence for Tyrocidine B is VKLFPWFNQY. We want to be able to identify if the gene that codes for this protein is in our candidate bacteria (spoiler: it is, you just need to find where). Recall 2 very important things:
+
+* How DNA codes for proteins (a codon key is conveniently attached at the back of this exam)
+* Tyrocidine B is cyclic! There are 10 possible Amino Acid sequences that will form Tyrocidine B
+
+Work on code that will help you find the sequence within the genome. 
+
+**NOTE:** You are not graded on if you find the sequence in the genome. You are graded on how well you approach the problem
+
+```{r}
+### DO NOT ERASE THIS CODE
+#genome <- readDNAStringSet("bac_genome.fa")[[1]]
+### DO NOT ERASE THIS CODE
+
+
+```
+
+
+# Question 4 (Markov Chains - 30 points)
+*Code comments are worth 5 points*
+
+Protein kinase B (also called AKT), is an important protein in the cell proliferation process. 
+Without AKT, your cells won't reproduce. A weighted directed graph showing other proteins involved in the AKT pathway are shown below:
+
+**insert picture here**
+
+
+You're trying to model a patient's AKT-mTOR pathway to determine is their creating pre-cancerous cells or not. You're able to ascertain that the initial state for this system is that AKT and cell proliferation are present. 
+What is the steady state?
+
+### 4A Set up the probability distribution matrix (5 points)
+```{r}
+
+```
+
+### 4B Set up the initial state matrix (5 points)
+```{r}
+
+```
+
+### 4C Find the steady state of the system (15 points)
+```{r}
+
+```
+
+# Extra Credit - 3 possible points
+
+Take any part of any problem (i.e. not all of problem 2, just 2A or 2B, etc.) of any previous exam, and resubmit your answer. Be sure to declare which problem from which exam you're resubmitting
+
